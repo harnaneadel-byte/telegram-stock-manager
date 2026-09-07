@@ -1247,7 +1247,7 @@ if (process.env.TELEGRAM_BOT_TOKEN) {
             [
               {
                 text: "🚀 Open POS Dashboard",
-                web_app: { url: "http://localhost:5173" } // Local dev link, will switch to cloud URL later
+                web_app: { url: "https://telegram-stock-manager.vercel.app/" } // // Updated to Vercel URL
               }
             ]
           ]

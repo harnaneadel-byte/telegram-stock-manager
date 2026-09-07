@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Package, Users, BarChart3, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
 
-const API_BASE = "http://localhost:3001/api/cloud";
+const API_BASE = "https://telegram-stock-manager.onrender.com/api/cloud";
 const COMPANY_ID = "d7d6d1a9-f4db-4214-874d-d8267b3dfde5";
 const WAREHOUSE_ID = "f465ed15-ffe9-4e75-ac8c-7fb4ad0e6672";
 const USER_ID = "1e495e0a-e468-4bba-a989-576321ae74a1";
