@@ -1,41 +1,89 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* 
-  Global Body Style
-  Prevents a white flash before the dark mode App loads
-*/
-body {
-  background-color: #1c1c1d;
-  margin: 0;
-  padding: 0;
+@layer utilities {
+  .hidden-on-screen {
+    display: none !important;
+  }
+  
+  /* Hide scrollbar for category pills on mobile */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  /* Thin subtle dark scrollbar for order terminal items */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 9999px;
+  }
 }
 
-/* Hide the receipt on the normal screen */
-.hidden-on-screen {
-  display: none;
+/* Smooth modal pop-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* When printing, hide the app and show only the receipt formatted for 80mm paper */
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ============================================================ */
+/* 80mm THERMAL RECEIPT & Z-REPORT PRINTER CONFIGURATION        */
+/* ============================================================ */
 @media print {
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
+
+  html, body {
+    width: 80mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide everything on the page */
   body * {
     visibility: hidden;
   }
-  
+
+  /* Only make the 80mm thermal slip visible */
   #printable-receipt, #printable-receipt * {
     visibility: visible;
   }
-  
+
   #printable-receipt {
-    display: block;
     position: absolute;
     left: 0;
     top: 0;
-    width: 80mm; /* Adjust to 58mm if you use a smaller mini-printer */
-    margin: 0;
-    padding: 0;
-    background-color: white; /* Forces the receipt to print on a white background */
-    color: black;
+    width: 80mm !important;
+    max-width: 80mm !important;
+    margin: 0 !important;
+    padding: 6mm 4mm !important;
+    display: block !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 }
