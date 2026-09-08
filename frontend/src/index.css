@@ -9,3 +9,28 @@ body {
   margin: 0;
   padding: 0;
 }
+/* Hide the receipt on the normal screen */
+.hidden-on-screen {
+  display: none;
+}
+
+/* When printing, hide the app and show only the receipt formatted for 80mm paper */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  #printable-receipt, #printable-receipt * {
+    visibility: visible;
+  }
+  
+  #printable-receipt {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm; /* Change to 58mm if you use a smaller mini-printer */
+    margin: 0;
+    padding: 0;
+  }
+}

@@ -1,3 +1,4 @@
+import Receipt from './components/Receipt';
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Package, Users, BarChart3, Trash2, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -13,6 +14,7 @@ export default function App() {
   const [selectedCustomer, setSelectedCustomer] = useState('');
   const [cart, setCart] = useState([]);
   const [cashAmount, setCashAmount] = useState('');
+const [lastOrder, setLastOrder] = useState(null);
   const [summary, setSummary] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
 
@@ -100,11 +102,21 @@ export default function App() {
       const data = await res.json();
 
       if (data.success) {
-        setStatusMessage({ type: 'success', text: `Invoice ${data.invoice.invoice_number} completed successfully!` });
-        setCart([]);
-        setCashAmount('');
-        fetchData();
-      } else {
+  setStatusMessage({ type: 'success', text: `Invoice ${data.invoice.invoice_number} completed!` });
+  // Save order details for printing
+  setLastOrder({
+    invoice: data.invoice,
+    cart: [...cart],
+    customerName: customers.find(c => c.customer_id === selectedCustomer)?.name,
+    total: calculateSubtotal(),
+    cash: cashAmount
+  });
+
+  setCart([]);
+  setCashAmount('');
+  fetchData();
+}
+ else {
         setStatusMessage({ type: 'error', text: data.error || "Checkout failed" });
       }
     } catch (err) {
@@ -131,7 +143,29 @@ export default function App() {
             <span>{statusMessage.text}</span>
           </div>
         )}
+{lastOrder && (
+  <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl mb-4 flex justify-between items-center">
+    <div>
+      <p className="font-bold text-emerald-800">Checkout Complete!</p>
+      <p className="text-xs text-emerald-600">Invoice {lastOrder.invoice.invoice_number}</p>
+    </div>
+    <button 
+      onClick={() => window.print()}
+      className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+    >
+      🖨️ Print Receipt
+    </button>
 
+    {/* The hidden receipt component */}
+    <Receipt 
+      invoiceData={lastOrder.invoice} 
+      cart={lastOrder.cart} 
+      customerName={lastOrder.customerName}
+      total={lastOrder.total}
+      cashReceived={lastOrder.cash}
+    />
+  </div>
+)}
         {/* TAB 1: POS CHECKOUT */}
         {activeTab === 'pos' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
